@@ -1,0 +1,18 @@
+name: stchk34_subtheme
+description: "Custom Theme"
+type: theme
+core: 8.x
+base theme: bootstrap_barrio
+core_version_requirement: ^8 || ^9
+
+regions:
+  top_header: 'Top header'
+  header: Header
+  breadcrumb: Breadcrumb
+  content: Content
+  footer_first: 'Footer first'
+
+libraries:
+  - stchk34_subtheme/global-styling
+libraries-override:
+  bootstrap_barrio/global-styling: false
