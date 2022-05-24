@@ -5,6 +5,48 @@
     padding: 20px 0 87px;
     background-color:$light-sand;
     height: 100%;
+    #block-searchform{
+        display:flex;
+        align-items: center;
+    }
+
+    #search-block-form{
+        display: flex;
+        align-items: center;
+        padding-right: 10px;
+    
+        #edit-actions {
+                padding: 0;
+                #edit-submit--2{
+                    display: flex;
+                    justify-content: flex-end;
+                    border-radius: 0;
+                    background: none;
+                    color: transparent;
+                    background: url('../img/search.png');
+                    background-size: 25px 25px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    border-color: #dbdbdb;
+                    padding-left: 0;
+                    padding-right: 0;
+                    width: 43px;
+                    height: 43px;
+                }
+           
+            }
+    
+        #edit-keys {
+            padding: 5px 0px 9px 5px;
+        }
+    
+        fieldset{
+            padding: 0;
+            flex: 0 1 auto;
+            width: auto;
+            max-width: none;
+        }
+    }
 }
 .site-branding__name {
     font-weight: bolder;
@@ -23,15 +65,20 @@
 .navbar {
     display: flex;
     background-color:$light-peach;
-    max-width: 1091px;
+    max-width: 1250px;
     width: 100%;
     margin: 0 auto;
     flex-direction: row;
     justify-content: space-between;
+
+    &-nav{
+        display:flex;
+    }
 }
 
 .nav-item {
     position: relative;
+    margin-top:30px;
 }
 
 .nav-link {
@@ -57,52 +104,5 @@
         margin-right: 14px;
     }
 }
-.menu--main{
-    margin-top:30px;
-}
-#block-addtoanybuttons{
-    margin-top:30px;
-}
-#block-searchform {
-    display: flex;
-    align-items: center;
-    padding-right: 10px;
 
-    #edit-actions {
-        padding: 0;
 
-        #edit-submit {
-            display: flex;
-            justify-content: flex-end;
-            border-radius: 0;
-            background: none;
-            color: transparent;
-            background: url('../img/search.png');
-            background-size: 25px 25px;
-            background-repeat: no-repeat;
-            background-position: center;
-            border-color: #dbdbdb;
-            padding-left: 0;
-            padding-right: 0;
-            width: 43px;
-            height: 43px;
-        }
-    }
-
-    #edit-keys {
-        padding: 5px 0px 9px 5px;
-    }
-
-    .form-row>fieldset,
-    .form-row>div {
-        padding: 0;
-        flex: 0 1 auto;
-        width: auto;
-        max-width: none;
-    }
-}
-
-#search-block-form {
-    display: flex;
-    margin-left: 10px;
-}

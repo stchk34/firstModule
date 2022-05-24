@@ -1,0 +1,32 @@
+#block-stchk34-subtheme-content{
+    .form-item-cats-name{
+        display: flex;
+        flex-direction: column;
+
+        label{
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        input{
+            width:230px;
+        }
+    }
+    #edit-submit{
+     
+    width: 95px;
+    height: 31px;
+    font-size: 15px;
+    margin-top: 5px;
+    text-transform: uppercase;
+    color: $white;
+    background-color:$brown;
+    border: none;
+    border-radius: 4px;
+
+    }
+    .stchk34{
+        margin:50px 0;
+        padding-left: 10px;
+        border-left: 5px solid $brown;
+    }
+}

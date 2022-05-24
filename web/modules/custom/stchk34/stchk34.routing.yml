@@ -1,7 +1,9 @@
 Meow.cats:
   path: '/stchk34/cats'
   defaults:
-    _controller: '\Drupal\stchk34\Controller\CatsPage::content'
+    _text: 'Hello! You can add here a photo of your cat'
+    _form: '\Drupal\stchk34\Form\CatsForm'
   requirements:
     _permission: 'access content'
+
 
