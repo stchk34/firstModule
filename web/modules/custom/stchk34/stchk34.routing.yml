@@ -1,0 +1,9 @@
+Meow.cats:
+  path: '/stchk34/cats'
+  defaults:
+    _text: 'Hello! You can add here a photo of your cat'
+    _form: '\Drupal\stchk34\Form\CatsForm'
+  requirements:
+    _permission: 'access content'
+
+
