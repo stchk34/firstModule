@@ -19,7 +19,7 @@
     public function content():array {
         $form = \Drupal::formBuilder()->getForm('Drupal\stchk34\Form\CatsForm');
         $build['content'] =[
-          '#markup'=> $this -> t('Hello! You can add here a photo of your cat.'),
+          '#markup'=> t('Hello! You can add here a photo of your cat.'),
           '#form' => $form,
         ];
         return $build;
