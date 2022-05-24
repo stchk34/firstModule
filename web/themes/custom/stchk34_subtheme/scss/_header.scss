@@ -17,7 +17,7 @@
     
         #edit-actions {
                 padding: 0;
-                #edit-submit--2{
+                #edit-submit{
                     display: flex;
                     justify-content: flex-end;
                     border-radius: 0;
@@ -28,6 +28,7 @@
                     background-repeat: no-repeat;
                     background-position: center;
                     border-color: #dbdbdb;
+                    border-radius:5px;
                     padding-left: 0;
                     padding-right: 0;
                     width: 43px;
@@ -38,6 +39,7 @@
     
         #edit-keys {
             padding: 5px 0px 9px 5px;
+
         }
     
         fieldset{

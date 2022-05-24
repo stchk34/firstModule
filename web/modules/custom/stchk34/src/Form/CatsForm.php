@@ -35,21 +35,15 @@ use Drupal\Core\Form\FormStateInterface;
     }
     }
  
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('stchk34.settings')
-      ->set('cats_name', $form_state->getValue('cats_name'))
-      ->save();
-
-    parent::submitForm($form, $form_state);
-  }
- 
    /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['container'] = [
+      '#type' => 'container',
+      '#attributes' => ['id' => 'message_ajaxform'],
+    ];
+
     $form['cats_name'] = [
          '#type' => 'textfield',
          '#title' => $this->t('Your cat’s name:'),
@@ -57,11 +51,31 @@ use Drupal\Core\Form\FormStateInterface;
          '#required' => TRUE,
          '#default_value' => $this->config('stchk34.settings')->get('cats_name'),
     ];
+
     $form['submit'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Add cat')
+        '#value' => $this->t('Add cat'),
+        '#ajax' => [
+          'callback' => '::ajaxSubmit',
+          'wrapper' => 'message_ajaxform',
+          'progress' => [
+            'type' => 'throbber',
+            'message' => t('Adding the cat\'s name..'),
+          ],        
+        ],  
     ];
 
     return $form;
+  }
+
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
+    $element = $form['container'];
+    if ($form_state->hasAnyErrors()) {
+      return $element;
+    }
+    else {  
+      $this->messenger()->addStatus(t("Name of the cat was added!"));
+    }
+    return $element;
   }
  }
