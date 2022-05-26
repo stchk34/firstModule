@@ -1,110 +1,115 @@
 @import "../scss/variables";
 
 #header {
-    z-index: 0;
-    padding: 20px 0 87px;
-    background-color:$light-sand;
-    height: 100%;
-    #block-searchform{
-        display:flex;
-        align-items: center;
-    }
+  z-index: 0;
+  padding: 20px 0 87px;
+  background-color: $light-sand;
+  height: 100%;
 
-    #search-block-form{
-        display: flex;
-        align-items: center;
-        padding-right: 10px;
-    
-        #edit-actions {
-                padding: 0;
-                #edit-submit{
-                    display: flex;
-                    justify-content: flex-end;
-                    border-radius: 0;
-                    background: none;
-                    color: transparent;
-                    background: url('../img/search.png');
-                    background-size: 25px 25px;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    border-color: #dbdbdb;
-                    border-radius:5px;
-                    padding-left: 0;
-                    padding-right: 0;
-                    width: 43px;
-                    height: 43px;
-                }
-           
-            }
-    
-        #edit-keys {
-            padding: 5px 0px 9px 5px;
-
-        }
-    
-        fieldset{
-            padding: 0;
-            flex: 0 1 auto;
-            width: auto;
-            max-width: none;
-        }
-    }
-}
-.site-branding__name {
-    font-weight: bolder;
-    font-size: 25px;
-    padding-left:10px;
-    color: $light-peach;
-}
-.site-branding__slogan{
-    color: $light-peach;
-}
-.site-branding-block{
-    padding:15px 45px;
-    font-size: 20px;
-    background-color:#3d2b1f;
-}
-.navbar {
+  #block-searchform {
     display: flex;
-    background-color:$light-peach;
-    max-width: 1250px;
-    width: 100%;
-    margin: 0 auto;
-    flex-direction: row;
-    justify-content: space-between;
+    align-items: center;
+  }
 
-    &-nav{
-        display:flex;
+  #search-block-form {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+
+    #edit-actions {
+      padding: 0;
+
+      #edit-submit {
+        display: flex;
+        justify-content: flex-end;
+        background: none;
+        color: transparent;
+        background: url('../img/search.png');
+        background-size: 25px 25px;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-color: #dbdbdb;
+        border-radius: 5px;
+        padding-left: 0;
+        padding-right: 0;
+        width: 43px;
+        height: 43px;
+      }
+
     }
+
+    #edit-keys {
+      padding: 5px 0px 9px 5px;
+
+    }
+
+    fieldset {
+      padding: 0;
+      flex: 0 1 auto;
+      width: auto;
+      max-width: none;
+    }
+  }
+}
+
+.site-branding__name {
+  font-weight: bolder;
+  font-size: 25px;
+  padding-left: 10px;
+  color: $light-peach;
+}
+
+.site-branding__slogan {
+  color: $light-peach;
+}
+
+.site-branding-block {
+  padding: 15px 45px;
+  font-size: 20px;
+  background-color: #3d2b1f;
+}
+
+.navbar {
+  display: flex;
+  background-color: $light-peach;
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &-nav {
+    display: flex;
+  }
 }
 
 .nav-item {
-    position: relative;
-    margin-top:30px;
+  position: relative;
+  margin-top: 30px;
 }
 
 .nav-link {
-    font-size: 14px;
-    margin-right: 20px;
-    text-transform: uppercase;
-    color:$light-brown;
+  font-size: 14px;
+  margin-right: 20px;
+  text-transform: uppercase;
+  color: $light-brown;
 
 
-    &:hover:after {
-        left: 0;
-        right: 0;
-        position: absolute;
-        content: "";
-        height: 7px;
-        top: 61px;
-        width: 80%;
-        margin: 0;
-        background: $dark;
-    }
+  &:hover:after {
+    left: 0;
+    right: 0;
+    position: absolute;
+    content: "";
+    height: 7px;
+    top: 61px;
+    width: 80%;
+    margin: 0;
+    background: $dark;
+  }
 
-    &:last-child {
-        margin-right: 14px;
-    }
+  &:last-child {
+    margin-right: 14px;
+  }
 }
 
 

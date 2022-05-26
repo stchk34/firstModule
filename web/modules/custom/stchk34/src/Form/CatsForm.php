@@ -146,7 +146,7 @@ class CatsForm extends ConfigFormBase {
     $data = [
       'cats_name' => $form_state->getValue('cats_name'),
       'email' => $form_state->getValue('email'),
-      'timestamp' => time(),
+      'timestamp' => date('d-m-Y H:i:s'),
       'image' => $image[0],
     ];
 
