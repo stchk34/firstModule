@@ -16,7 +16,14 @@ use Drupal\file\Entity\File;
 class CatsForm extends ConfigFormBase {
 
   /**
-   * {@inheritdoc}
+   * Returns a unique string identifying the form.
+   *
+   * The returned ID should be a unique string that can be a valid PHP function
+   * name, since it's used in hook implementation names such as
+   * hook_form_FORM_ID_alter().
+   *
+   * @return string
+   *   The unique string identifying the form.
    */
   public function getFormId() {
     return 'stchk34_settings';
@@ -30,7 +37,15 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Form constructor.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form structure.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['cats_name'] = [
@@ -49,6 +64,7 @@ class CatsForm extends ConfigFormBase {
       '#ajax' => [
         'callback' => '::validateEmailAjax',
         'event' => 'keyup',
+        'progress' => 'none',
       ],
     ];
 
@@ -79,20 +95,32 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * Validate form.
+   * Form validation handler.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    $valid = $this->validateEmail($form, $form_state);
     if (strlen($form_state->getValue('cats_name')) < 2) {
       $form_state->setErrorByName('cats_name', $this->t('Name is too short.'));
     }
     elseif (strlen($form_state->getValue('cats_name')) > 32) {
       $form_state->setErrorByName('cats_name', $this->t('Name is too long.'));
     }
+    if (!$valid) {
+      $form_state->setErrorByName('email', $this->t('Invalid email'));
+    }
   }
 
   /**
+   * Email validation handler.
+   *
    * @return bool
-   *   email validation.
+   *
+   *   The current state of the form.
    */
   protected function validateEmail(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
@@ -104,7 +132,14 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Form submission handler.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $picture = $form_state->getValue('cat_picture');
@@ -123,9 +158,7 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *
-   *   Validation Email.
+   * {@inheritdoc}
    */
   public function ajaxSubmit(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
@@ -147,14 +180,14 @@ class CatsForm extends ConfigFormBase {
    *
    *   Validation Email.
    */
-  public function validateEmailAjax(array &$form, FormStateInterface $form_state): AjaxResponse {
+  public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $valid = $this->validateEmail($form, $form_state);
     $response = new AjaxResponse();
     if (!$valid) {
-      $response->addCommand(new MessageCommand('Invalid Email'));
+      $response->addCommand(new MessageCommand('Invalid Email', NULL, ['type' => 'error']));
     }
     else {
-      $response->addCommand(new MessageCommand('', ".null", [], TRUE));
+      $response->addCommand(new MessageCommand(''));
     }
     return $response;
   }
