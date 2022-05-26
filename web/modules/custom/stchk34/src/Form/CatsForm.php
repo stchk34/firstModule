@@ -75,53 +75,52 @@ class CatsForm extends ConfigFormBase{
       return $form;
     }
 
-  /**
+     /**
   * Validate form
   */
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
-      $email=$form_state->getValue('email');
-        if (strlen($form_state->getValue('cats_name')) < 2) {
-          $form_state->setErrorByName('cats_name', $this->t('Name is too short.'));
-        } elseif (strlen($form_state->getValue('cats_name')) >32) {
-          $form_state->setErrorByName('cats_name', $this->t('Name is too long.'));
-        }
-        if((!filter_var($email, FILTER_VALIDATE_EMAIL)) || (strpbrk($email,$stableExpression))){
-          $form_state->setErrorByName('cats_name', $this->t('Invalid email'));
-        }
-    }
-
-  /**
-  * {@inheritdoc}
-  */
-    public function ajaxSubmit(array $form, FormStateInterface $form_state)
-    {
-      $response = new AjaxResponse();
-      if ($form_state->hasAnyErrors()) {
-        foreach ($form_state->getErrors() as $errors_array) {
-          $response->addCommand(new MessageCommand($errors_array));
-        }
-      } else {
-          $response->addCommand(new MessageCommand('You adedd a cat!'));
+  public function validateForm(array &$form, FormStateInterface $form_state)
+  {
+    $email=$form_state->getValue('email');
+      if (strlen($form_state->getValue('cats_name')) < 2) {
+        $form_state->setErrorByName('cats_name', $this->t('Name is too short.'));
+      } elseif (strlen($form_state->getValue('cats_name')) >32) {
+        $form_state->setErrorByName('cats_name', $this->t('Name is too long.'));
       }
-      \Drupal::messenger()->deleteAll();
-      return $response;
-    }
-
-  /**
-  * {@inheritdoc}
-  */
-    public function validateEmailAjax(array &$form, FormStateInterface $form_state)
-    {
-      $response = new AjaxResponse();
-      $email=$form_state->getValue('email');
-      $stableExpression = '/[^A-Za-z_\-]+@\w+(?:\.\w+)+$/';
-      if(strpbrk($email,$stableExpression)){
-        $response->addCommand(new MessageCommand('Invalid Email'));
-      } else{
-          $response->addCommand(new MessageCommand('',".null",[],true));
+      if((!filter_var($email, FILTER_VALIDATE_EMAIL)) || (strpbrk($email,$stableExpression))){
+        $form_state->setErrorByName('cats_name', $this->t('Invalid email'));
       }
-      return $response;
-    }
+  }
 
+/**
+* {@inheritdoc}
+*/
+  public function ajaxSubmit(array $form, FormStateInterface $form_state)
+  {
+    $response = new AjaxResponse();
+    if ($form_state->hasAnyErrors()) {
+      foreach ($form_state->getErrors() as $errors_array) {
+        $response->addCommand(new MessageCommand($errors_array));
+      }
+    } else {
+        $response->addCommand(new MessageCommand('You adedd a cat!'));
+    }
+    \Drupal::messenger()->deleteAll();
+    return $response;
+  }
+
+/**
+* {@inheritdoc}
+*/
+  public function validateEmailAjax(array &$form, FormStateInterface $form_state)
+  {
+    $response = new AjaxResponse();
+    $email=$form_state->getValue('email');
+    $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
+    if(!strpbrk($email,$stableExpression)){
+      $response->addCommand(new MessageCommand('Invalid Email'));
+    } else{
+        $response->addCommand(new MessageCommand('',".null",[],true));
+    }
+    return $response;
+  }
 }
