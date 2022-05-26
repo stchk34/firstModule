@@ -6,10 +6,10 @@
 @import "../node_modules/bootstrap/scss/root";
 @import "../node_modules/bootstrap/scss/reboot";
 @import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/tables";
 @import "../node_modules/bootstrap/scss/grid";
 @import "../node_modules/bootstrap/scss/transitions";
 @import "../node_modules/bootstrap/scss/utilities";
-
 
 @import "../scss/header";
 @import "../scss/_footer.scss";
@@ -23,6 +23,7 @@ body {
   border: none;
   height: 100%;
 }
+
 html {
   scroll-behavior: smooth;
 }
@@ -36,14 +37,15 @@ body {
 }
 
 .content,
-.view-content{
+.view-content {
   max-width: 1250px;
   width: 100%;
   margin: 0 auto;
 }
-.main-content{
-  background-color:$light-peach;
-  min-height:100%;
+
+.main-content {
+  background-color: $light-peach;
+  min-height: 100%;
   position: relative;;
 }
 
@@ -68,9 +70,10 @@ ul {
   padding: 0;
   margin: 0;
 }
+
 .pager__item {
   margin-right: 26px;
-  
+
 }
 
 .views-field-title {

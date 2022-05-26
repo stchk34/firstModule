@@ -27,7 +27,7 @@ function stchk34_schema() {
         'not null' => TRUE,
         'default' => '',
       ],
-      'cat_image' => [
+      'image' => [
         'type' => 'int',
         'not null' => TRUE,
         'description' => 'Unique ID of the cat\'s image.',

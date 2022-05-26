@@ -4,4 +4,3 @@ description: This module creates a page with a list of cats and a form where use
 core: 8.x
 core_version_requirement: ^8 || ^9
 package: custom
-configure: stchk34.settings

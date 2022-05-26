@@ -26,7 +26,7 @@ class CatsForm extends ConfigFormBase {
    *   The unique string identifying the form.
    */
   public function getFormId() {
-    return 'stchk34_settings';
+    return 'stchk34';
   }
 
   /**
@@ -68,13 +68,13 @@ class CatsForm extends ConfigFormBase {
       ],
     ];
 
-    $form['cat_picture'] = [
+    $form['image'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Your cat’s image:'),
       '#required' => TRUE,
       '#description' => $this->t('Valid extensions: jpeg, jpg, png. Max file size 2MB'),
       '#multiple' => FALSE,
-      '#default_value' => $this->config('stchk34.settings')->get('cat_picture'),
+      '#default_value' => $this->config('stchk34')->get('image'),
       '#upload_location' => 'public://stchk34/cats',
       '#upload_validators' => [
         'file_validate_extensions' => ['jpeg jpg png'],
@@ -142,15 +142,15 @@ class CatsForm extends ConfigFormBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $picture = $form_state->getValue('cat_picture');
+    $image = $form_state->getValue('image');
     $data = [
       'cats_name' => $form_state->getValue('cats_name'),
       'email' => $form_state->getValue('email'),
       'timestamp' => time(),
-      'cat_image' => $picture[0],
+      'image' => $image[0],
     ];
 
-    $file = File::load($picture[0]);
+    $file = File::load($image[0]);
     $file->setPermanent();
     $file->save();
 
