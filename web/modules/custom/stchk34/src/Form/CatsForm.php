@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\MessageCommand;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Entity\File;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Our simple form class.
@@ -14,6 +15,22 @@ use Drupal\file\Entity\File;
  * @package Drupal\stchk34\Form
  */
 class CatsForm extends ConfigFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): CatsForm {
+    $instance = parent::create($container);
+    $instance->database = $container->get('database');
+    return $instance;
+  }
+
+  /**
+   * Drupal\Core\Database defenition.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  public $database;
 
   /**
    * Returns a unique string identifying the form.
@@ -37,15 +54,7 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * Form constructor.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return array
-   *   The form structure.
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['cats_name'] = [
@@ -60,10 +69,9 @@ class CatsForm extends ConfigFormBase {
       '#title' => $this->t('Your email:'),
       '#required' => TRUE,
       '#description' => $this->t('Email names can only contain Latin letters, underscores, or hyphens'),
-      '#maxlength' => 25,
       '#ajax' => [
         'callback' => '::validateEmailAjax',
-        'event' => 'keyup',
+        'event' => 'input',
         'progress' => 'none',
       ],
     ];
@@ -132,38 +140,33 @@ class CatsForm extends ConfigFormBase {
   }
 
   /**
-   * Form submission handler.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $image = $form_state->getValue('image');
-    $data = [
-      'cats_name' => $form_state->getValue('cats_name'),
-      'email' => $form_state->getValue('email'),
-      'timestamp' => date('d-m-Y H:i:s'),
-      'image' => $image[0],
-    ];
-
-    $file = File::load($image[0]);
-    $file->setPermanent();
-    $file->save();
-
-    \Drupal::database()->insert('stchk34')->fields($data)->execute();
+    $file_data = $form_state->getValue(['image']);
+    $file = File::load($file_data[0]);
+    if ($file !== NULL) {
+      $file->setPermanent();
+      $file->save();
+      $this->database
+        ->insert('stchk34')
+        ->fields([
+          'cats_name' => $form_state->getValue(['cats_name']),
+          'email' => $form_state->getValue('email'),
+          'image' => $form_state->getValue(['image'])[0],
+          'timestamp' => \Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
+    }
+    $this->messenger->addStatus($this->t('You added your cat!'));
   }
 
   /**
-   * {@inheritdoc}
+   *
    */
   public function ajaxSubmit(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
-    $valid = $this->validateEmail($form, $form_state);
-    if ($form_state->hasAnyErrors() || !$valid) {
+    if ($form_state->hasAnyErrors()) {
       foreach ($form_state->getErrors() as $errors_array) {
         $response->addCommand(new MessageCommand($errors_array));
       }

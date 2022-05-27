@@ -33,7 +33,7 @@ class CatsPage extends ControllerBase {
       '#theme' => 'cat_page',
       '#header' => [
         '#type' => 'markup',
-        '#markup' => '<div class="process-head">' . $this->t('Hello! You can add here a photo of your cat.') . '</div>',
+        '#markup' => $this->t('Hello! You can add here a photo of your cat.') ,
       ],
       '#form' => $form,
       '#table' => $table,
