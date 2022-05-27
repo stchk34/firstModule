@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function stchk34_schema() {
+  $schema['stchk34'] = [
+    'description' => 'Cat info database',
+    'fields' => [
+      'id' => [
+        'description' => 'ID your cat.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'cats_name' => [
+        'description' => 'Cat name',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'email' => [
+        'description' => 'User email',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'image' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Unique ID of the cat\'s image.',
+      ],
+      'timestamp' => [
+        'description' => 'Timestamp',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'id',
+    ],
+  ];
+
+  return $schema;
+}

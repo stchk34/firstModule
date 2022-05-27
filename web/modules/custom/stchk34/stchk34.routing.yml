@@ -1,0 +1,7 @@
+Meow.cats:
+  path: '/stchk34/cats'
+  defaults:
+    _controller: '\Drupal\stchk34\Controller\CatsPage::content'
+  requirements:
+    _permission: 'access content'
+
