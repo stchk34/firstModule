@@ -21,6 +21,7 @@ class CatsForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container): CatsForm {
     $instance = parent::create($container);
+    $instance->messenger = $container->get('messenger');
     $instance->database = $container->get('database');
     return $instance;
   }
@@ -158,11 +159,11 @@ class CatsForm extends ConfigFormBase {
         ])
         ->execute();
     }
-    $this->messenger->addStatus($this->t('You added your cat!'));
+    $this->messenger->addStatus($this->t('Hi! You added your cat!'));
   }
 
   /**
-   *
+   * Submit Ajax.
    */
   public function ajaxSubmit(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();

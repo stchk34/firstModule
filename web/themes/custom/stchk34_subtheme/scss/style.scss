@@ -46,7 +46,8 @@ body {
 .main-content {
   background-color: $light-peach;
   min-height: 100%;
-  position: relative;;
+  position: relative;
+  flex: 1 0 auto;
 }
 
 h2 {
