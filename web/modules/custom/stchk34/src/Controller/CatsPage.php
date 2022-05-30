@@ -50,6 +50,7 @@ class CatsPage extends ControllerBase {
         '#alt' => 'Cat',
         '#title' => 'Cat',
         '#width' => 255,
+        '#height' => 255,
       ];
       $variable = [
         'cats_name' => $row->cats_name,
