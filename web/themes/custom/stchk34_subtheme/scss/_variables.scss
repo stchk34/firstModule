@@ -1,0 +1,24 @@
+$grid-gutter-width:30px;
+$font-family-base:'Zen Loop', cursive;
+
+
+$grid-breakpoints: (xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px);
+$container-max-widths: (sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1250px);
+
+$light-peach:#EBDCB2;
+$light-grey:#e7e6e2;
+$light-sand:#8d7c5c;
+$brown:#3d2b1f;
+$light-brown:#662E1C;
+$dark:#42313A;
+$white:#fff;
+$link-decoration: none;
+$link-hover-color: #6f0000;
+$link-hover-decoration:none;

@@ -1,0 +1,14 @@
+<div class="table_cat">
+  <div class="cat_info">
+    <p class="cat_table_name">{{ cats_name }}</p>
+    <p class="cat_table_email">{{ email }}</p>
+    <p class="cat_table_date">{{ date }}</p>
+    <td>
+      <a class="use-ajax edit" data-dialog-type="modal" href="/stchk34/cats/edit/{{ cat.id }}">Edit</a>
+    </td>
+    <td>
+      <a class="use-ajax delete" data-dialog-type="modal" href="/stchk34/cats/delete/{{ cat.id }}">Delete</a>
+    </td>
+  </div>
+  <div class="image_wrapper">{{ image }}</div>
+</div>

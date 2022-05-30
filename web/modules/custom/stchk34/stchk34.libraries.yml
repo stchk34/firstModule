@@ -1,0 +1,8 @@
+stchk34:
+  version: VERSION
+  js:
+    js/popup.js: { }
+  dependencies:
+      - core/jquery
+      - core/drupal
+      - core/drupal.dialog.ajax
