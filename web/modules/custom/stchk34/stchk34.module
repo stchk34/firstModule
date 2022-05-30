@@ -21,5 +21,21 @@ function stchk34_theme($existing, $type, $theme, $path) {
         'table' => NULL,
       ],
     ],
+    'table-block' => [
+      'variables' => [
+        'cats_name' => NULL,
+        'email' => NULL,
+        'image' => NULL,
+        'date' => NULL,
+        'id' => NULL,
+      ],
+    ],
   ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function stchk34_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'stchk34/stchk34';
 }

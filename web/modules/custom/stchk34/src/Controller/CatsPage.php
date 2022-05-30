@@ -22,7 +22,7 @@ class CatsPage extends ControllerBase {
       'cats_name' => $this->t('Cat name'),
       'email' => $this->t('E-mail'),
       'image' => $this->t('Cat image'),
-      'timestamp' => $this->t('Submitting date'),
+      'date' => $this->t('Submitting date'),
     ];
     $table = [
       '#type' => 'table',
@@ -33,7 +33,7 @@ class CatsPage extends ControllerBase {
       '#theme' => 'cat_page',
       '#header' => [
         '#type' => 'markup',
-        '#markup' => $this->t('Hello! You can add here a photo of your cat.') ,
+        '#markup' => $this->t('Hello! You can add here a photo of your cat.'),
       ],
       '#form' => $form,
       '#table' => $table,
@@ -42,11 +42,11 @@ class CatsPage extends ControllerBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Get database.
    */
   public function getCatsInfo() {
     $output = \Drupal::database()->select('stchk34', 's')
-      ->fields('s', ['cats_name', 'email', 'image', 'timestamp'])
+      ->fields('s', ['cats_name', 'email', 'image', 'date'])
       ->orderBy('id', 'DESC')
       ->execute();
     $data = [];
@@ -55,7 +55,7 @@ class CatsPage extends ControllerBase {
         'name' => $cat->cats_name,
         'email' => $cat->email,
         'image' => File::load($cat->image)->getFileUri(),
-        'timestamp' => $cat->timestamp,
+        'date' => date('d-m-Y H:i:s', $cat->date),
       ];
     }
     return $data;

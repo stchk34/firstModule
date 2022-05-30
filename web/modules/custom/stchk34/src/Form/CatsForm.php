@@ -155,7 +155,7 @@ class CatsForm extends ConfigFormBase {
           'cats_name' => $form_state->getValue(['cats_name']),
           'email' => $form_state->getValue('email'),
           'image' => $form_state->getValue(['image'])[0],
-          'timestamp' => \Drupal::time()->getRequestTime(),
+          'date' => date(),
         ])
         ->execute();
     }
