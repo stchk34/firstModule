@@ -3,64 +3,104 @@
 namespace Drupal\stchk34\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 /**
  * Provides route for our custom module.
+ *
+ * @method database()
  */
 class CatsPage extends ControllerBase {
 
   /**
-   * Display simple page.
-   *
-   * @return array
-   *   Comment.
+   * Getting form from Catsform.
    */
   public function content() {
-    $form = $this->formBuilder()->getForm('Drupal\stchk34\Form\CatsForm');
-    $heading = [
-      'cats_name' => $this->t('Cat name'),
-      'email' => $this->t('E-mail'),
-      'image' => $this->t('Cat image'),
-      'date' => $this->t('Submitting date'),
-    ];
-    $table = [
-      '#type' => 'table',
-      '#header' => $heading,
-      '#rows' => $this->getCatsInfo(),
-    ];
-    $build['content'] = [
+    $form = \Drupal::formBuilder()->getForm('\Drupal\stchk34\Form\CatsForm');
+    return [
       '#theme' => 'cat_page',
-      '#header' => [
-        '#type' => 'markup',
-        '#markup' => $this->t('Hello! You can add here a photo of your cat.'),
-      ],
+      '#markup' => 'Hello! You can add here a photo of your cat.',
       '#form' => $form,
-      '#table' => $table,
+      '#list' => $this->getCatsInfo(),
     ];
-    return $build;
   }
 
   /**
    * Get database.
    */
-  public function getCatsInfo() {
-    $output = \Drupal::database()->select('stchk34', 's')
-      ->fields('s', ['cats_name', 'email', 'image', 'date'])
-      ->orderBy('id', 'DESC')
-      ->execute();
+  public function getCatsInfo(): array {
+    $current_user = \Drupal::currentUser();
+    $roles = $current_user->getRoles();
+    $admin = "administrator";
+    $query = \Drupal::database();
+    $result = $query->select('stchk34', 's')
+      ->fields('s', ['cats_name', 'email', 'image', 'date', 'id'])
+      ->orderBy('date', 'DESC')
+      ->execute()->fetchAll();
     $data = [];
-    foreach ($output as $cat) {
-      $data[] = [
-        'name' => $cat->cats_name,
-        'email' => $cat->email,
-        'image' => File::load($cat->image)->getFileUri(),
-        'date' => date('d-m-Y H:i:s', $cat->date),
+    foreach ($result as $row) {
+      $file = File::load($row->image);
+      $uri = $file->getFileUri();
+      $catImage = [
+        '#theme' => 'image',
+        '#uri' => $uri,
+        '#alt' => 'Cat',
+        '#title' => 'Cat',
+        '#width' => 255,
       ];
+      $variable = [
+        'cats_name' => $row->cats_name,
+        'email' => $row->email,
+        'image' => [
+          'data' => $catImage,
+        ],
+        'date' => date('d-m-Y H:i:s', $row->date),
+      ];
+      if (in_array($admin, $roles)) {
+        $url = Url::fromRoute('delete_form', ['id' => $row->id]);
+        $url_edit = Url::fromRoute('edit_form', ['id' => $row->id]);
+        $project_link = [
+          '#title' => 'Delete',
+          '#type' => 'link',
+          '#url' => $url,
+          '#attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => 'modal',
+          ],
+          '#attached' => [
+            'library' => ['core/drupal.dialog.ajax'],
+          ],
+        ];
+        $link_edit = [
+          '#title' => 'Edit',
+          '#type' => 'link',
+          '#url' => $url_edit,
+          '#attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => 'modal',
+          ],
+          '#attached' => [
+            'library' => ['core/drupal.dialog.ajax'],
+          ],
+        ];
+        $variable['link'] = [
+          'data' => [
+            "#theme" => 'operations',
+            'delete' => $project_link,
+            'edit' => $link_edit,
+          ],
+        ];
+      }
+      $data[] = $variable;
     }
-    return $data;
+    $build['table'] = [
+      '#type' => 'table',
+      '#rows' => $data,
+    ];
+    return $build;
   }
 
   /**

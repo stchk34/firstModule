@@ -2,17 +2,21 @@
 
 namespace Drupal\stchk34\Form;
 
+use Drupal\Core\Ajax\MessageCommand;
+use Drupal\Core\Ajax\RemoveCommand;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Ajax\MessageCommand;
-use Drupal\Core\Url;
-use Drupal\Core\Ajax\RedirectCommand;
 
 /**
  * Form for adding cats.
+ *
+ * @method database()
+ * @property \Drupal\Core\Database\Connection|mixed|object|null $database
+ * @property mixed|null $id
  */
 class EditCat extends FormBase {
 
@@ -36,82 +40,66 @@ class EditCat extends FormBase {
   /**
    * Drupal\Core\Database defenition.
    *
-   * @var \Drupal\Core\Database\Connection|object|null
+   * @var object
    */
-  public $database;
+  protected object $cat;
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId(): string {
-    return 'edit_cat';
+  public function getFormId() : string {
+    return "edit_form";
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL) {
     $this->id = $id;
-    $data = $this->database->select('stchk34', 's')
+    $query = $this->database();
+    $data = $query
+      ->select('stchk34', 's')
       ->condition('s.id', $id, '=')
-      ->fields('e', ['id', 'cats_name', 'email', 'image'])
+      ->fields('s', ['cats_name', 'email', 'image', 'id'])
       ->execute()->fetchAll();
-    $form['#prefix'] = '<div id="edit_wrapper">';
-    $form['#suffix'] = '</div>';
-    $form['#attached'] = ['library' => ['stchk34/stchk34_library']];
-    $form['adding_cat'] = [
+    $form['cats_name'] = [
       '#type' => 'textfield',
-      '#default_value' => $data[0]->name,
       '#title' => $this->t('Your cat’s name:'),
+      '#default_value' => $data[0]->cats_name,
       '#required' => TRUE,
-      '#placeholder' => $this->t('The name must be in range from 2 to 32 symbols...'),
+      '#prefix' => '<div class="error-message-modal"></div>',
     ];
     $form['email'] = [
-      '#type' => 'email',
       '#title' => $this->t('Your email:'),
-      '#placeholder' => $this->t('Only English letters, - and _'),
+      '#type' => 'email',
       '#required' => TRUE,
       '#default_value' => $data[0]->email,
+      '#suffix' => '<div class="email-message-modal"></div>',
       '#ajax' => [
         'callback' => '::validateEmailAjax',
         'event' => 'input',
-        'disable-refocus' => TRUE,
-        'progress' => [
-          'type' => 'none',
-          'message' => $this->t('Verifying email..'),
-        ],
       ],
-    ];
-    $form['message'] = [
-      '#type' => 'markup',
-      '#markup' => '<div id ="edit_email_error">&nbsp;</div>',
     ];
     $form['image'] = [
-      '#title' => $this->t('Your cat’s image:'),
-      '#description' => $this->t('Cat photo'),
+      '#title' => 'Image',
       '#type' => 'managed_file',
+      '#multiple' => FALSE,
+      '#description' => $this->t('Valid extensions: jpeg, jpg, png. Max file size 2MB'),
       '#default_value' => [$data[0]->image],
-      '#size' => 40,
-      '#attributes' => [
-        'class' => ['.clear_class'],
-      ],
       '#required' => TRUE,
-      '#upload_location' => 'public://img',
+      '#upload_location' => 'public://stchk34/cats',
       '#upload_validators' => [
-        'file_validate_extensions' => ['png jpg jpeg'],
-        'file_validate_size' => [2097152],
+        'file_validate_extensions' => ['jpeg jpg png'],
+        'file_validate_size' => [2100000],
       ],
     ];
-    $form['submit'] = [
+    $form['actions']['#type'] = 'actions';
+    $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Save'),
-      '#button_type' => 'submit',
+      '#value' => $this->t('Edit Cat'),
+      '#button_type' => 'primary',
       '#ajax' => [
-        'callback' => '::setMessage',
-        'wrapper' => 'edit_wrapper',
-        'progress' => [
-          'type' => 'none',
-        ],
+        'callback' => '::ajaxSubmit',
       ],
     ];
     return $form;
@@ -124,89 +112,82 @@ class EditCat extends FormBase {
    *
    *   The current state of the form.
    */
-  protected function validateEmail(array &$form, FormStateInterface $form_state): bool {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
-    $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
-    if (preg_match($stableExpression, $email)) {
-      return TRUE;
+    if (strlen($form_state->getValue('name')) < 2) {
+      $form_state->setErrorByName('name', $this->t('Name is too short.'));
     }
-    return FALSE;
-  }
-
-  /**
-   * Dynamic email validation.
-   */
-  public function validateEmailAjax(array &$form, FormStateInterface $form_state): AjaxResponse {
-    $valid = $this->validateEmail($form, $form_state);
-    $response = new AjaxResponse();
-    if (!$valid) {
-      $response->addCommand(new MessageCommand('Invalid Email', NULL, ['type' => 'error']));
+    elseif (strlen($form_state->getValue('name')) > 32) {
+      $form_state->setErrorByName('name', $this->t('Name is too long.'));
     }
-    else {
-      $response->addCommand(new MessageCommand(''));
+    if ((!filter_var($email, FILTER_VALIDATE_EMAIL))
+      || (strpbrk($email, '1234567890+*/!#$^&*()='))) {
+      $form_state->setErrorByName('name', $this->t('Invalid Email'));
     }
-    return $response;
   }
 
   /**
    * {@inheritdoc}
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
-   * @throws \Exception
    */
-  public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $file_data = $form_state->getValue('image');
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $file_data = $form_state->getValue(['image']);
     $file = File::load($file_data[0]);
     if ($file !== NULL) {
       $file->setPermanent();
       $file->save();
-      $this->database
-        ->update('stchk34')
+      $query = $this->database()->update('stchk34')
         ->condition('id', $this->id)
         ->fields([
-          'cats_name' => $form_state->getValue(['cats_name']),
+          'cats_name' => $form_state->getValue('cats_name'),
           'email' => $form_state->getValue('email'),
-          'image' => $form_state->getValue('image')[0],
+          'image' => $file_data[0],
         ])
         ->execute();
     }
-    $this->messenger->addStatus($this->t('Hurray! You edited your cat!'));
-    $form_state->setRedirect('cats');
   }
 
   /**
    * Form validation.
    */
-  public function validateForm(array &$form, FormStateInterface $form_state): void {
-    if ((mb_strlen($form_state->getValue('cats_name')) < 2)) {
-      $form_state->setErrorByName(
-        'cats_name',
-        $this->t('Your name is less than 2 symbols.'));
-    }
-    if ((mb_strlen($form_state->getValue('cats_name')) > 32)) {
-      $form_state->setErrorByName(
-        'cats_name',
-        $this->t('Your name is longer than 32 symbols.')
-      );
-    }
-    $regularexp = '/[-_@A-Za-z.]/';
-    $line = $form_state->getValue('email');
-    $linelength = strlen($line);
-    for ($i = 0; $i < $linelength; $i++) {
-      if (!preg_match($regularexp, $line[$i])) {
-        $form_state->setErrorByName('email', 'Your email is not valid');
+  public function ajaxSubmit(array $form, FormStateInterface $form_state): AjaxResponse {
+    $response = new AjaxResponse();
+    $url = Url::fromRoute('cats');
+    if ($form_state->hasAnyErrors()) {
+      foreach ($form_state->getErrors() as $errors_array) {
+        $response->addCommand(new MessageCommand($errors_array));
       }
     }
+    else {
+      $response->addCommand(new MessageCommand('You added a cat!'));
+    }
+    $this->messenger()->deleteAll();
+    return $response;
   }
 
   /**
-   * Submit Ajax.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *
+   *   Validation Email.
    */
-  public function setMessage(array &$form, FormStateInterface $form_state) : AjaxResponse {
+  public function validateEmailAjax(array &$form, FormStateInterface $form_state): AjaxResponse {
     $response = new AjaxResponse();
-    $url = Url::fromRoute('cats');
-    $command = new RedirectCommand($url->toString());
-    $response->addCommand($command);
+    $input = $form_state->getValue('email');
+    $regex = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
+    if (preg_match($regex, $input)) {
+      $response->addCommand(new MessageCommand(
+        $this->t('Email valid'),
+        '.email-massage-modal'));
+    }
+    else {
+      $response->addCommand(new MessageCommand(
+        $this->t('Email names can only contain Latin letters, underscores, or hyphens'),
+        '.email-message-modal', ['type' => 'error']));
+    }
+    if (empty($input)) {
+      $response->addCommand(new RemoveCommand('.email-message-modal .messages--error'));
+    }
     return $response;
   }
 

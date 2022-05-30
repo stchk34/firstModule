@@ -5,18 +5,20 @@ Meow.cats:
   requirements:
     _permission: 'access content'
 
-cats.deleteCat:
-  path: '/stchk34/deleteForm/{id}'
+delete_form:
+  path: '/stchk34/delete/{id}'
   defaults:
     _form: '\Drupal\stchk34\Form\DeleteForm'
-    _title: 'Are u sure u wanna delete this cat?'
+    _title: 'Are you sure?'
   requirements:
+    _role: 'administrator'
     _permission: 'administrator'
 
-cats.editCat:
-    path: '/stchk34/editCat/{id}'
-    defaults:
-      _form: '\Drupal\stchk34\Form\EditCat'
-      _title: 'Save your editing?'
-    requirements:
-      _permission: 'administrator'
+edit_form:
+  path: '/stchk34/edit/{id}'
+  defaults:
+    _form: '\Drupal\stchk34\Form\EditCat'
+    _title: 'Edit Cat'
+  requirements:
+    _role: 'administrator'
+    _permission: 'administrator'

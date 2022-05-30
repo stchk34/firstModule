@@ -16,26 +16,10 @@ function stchk34_theme($existing, $type, $theme, $path) {
   return [
     'cat_page' => [
       'variables' => [
-        'header' => NULL,
+        'markup' => NULL,
         'form' => NULL,
-        'table' => NULL,
-      ],
-    ],
-    'table-block' => [
-      'variables' => [
-        'cats_name' => NULL,
-        'email' => NULL,
-        'image' => NULL,
-        'date' => NULL,
-        'id' => NULL,
+        'list' => NULL,
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_page_attachments().
- */
-function stchk34_page_attachments(array &$attachments) {
-  $attachments['#attached']['library'][] = 'stchk34/stchk34';
 }
