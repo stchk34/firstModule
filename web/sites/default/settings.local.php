@@ -156,14 +156,14 @@ $settings['skip_permissions_hardening'] = TRUE;
 
 
 // Docksal DB connection settings.
-$databases['default']['default'] = array (
+$databases['default']['default'] = [
   'database' => getenv('MYSQL_DATABASE'),
   'username' => getenv('MYSQL_USER'),
   'password' => getenv('MYSQL_PASSWORD'),
   'host' => getenv('MYSQL_HOST'),
   'port' => '3306',
   'driver' => 'mysql',
-);
+];
 
 // This needs to be includes here otherwise installing a site from scratch will
 // write both salt AND local DB setting into settings.php (which we don't want).
@@ -179,7 +179,7 @@ $config['system.file']['path']['temporary'] = '/tmp';
 // Reverse proxy configuration (Docksal vhost-proxy)
 if (PHP_SAPI !== 'cli') {
   $settings['reverse_proxy'] = TRUE;
-  $settings['reverse_proxy_addresses'] = array($_SERVER['REMOTE_ADDR']);
+  $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
   // HTTPS behind reverse-proxy
   if (
     isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' &&
@@ -190,3 +190,5 @@ if (PHP_SAPI !== 'cli') {
     $_SERVER['SERVER_PORT'] = 443;
   }
 }
+
+$settings["config_sync_directory"] = '../config/sync';
