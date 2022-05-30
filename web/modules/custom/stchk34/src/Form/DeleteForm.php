@@ -3,18 +3,22 @@
 namespace Drupal\stchk34\Form;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\file\Entity\File;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines a confirmation form to confirm deletion cat by id.
- *
- * @method database()
+ * Deleting cats.
  */
 class DeleteForm extends ConfirmFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
+    return 'delete_form';
+  }
 
   /**
    * Drupal\Core\Database defenition.
@@ -43,7 +47,21 @@ class DeleteForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, string $id = NULL): array {
+  public function getQuestion(): TranslatableMarkup {
+    return $this->t('Are you sure?');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCancelUrl(): Url {
+    return new Url('Meow.cats');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL): array {
     $this->id = $id;
     return parent::buildForm($form, $form_state);
   }
@@ -51,48 +69,12 @@ class DeleteForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $image = $form_state->getValue('image');
-    $database = $this->database();
-    $result = $database->select('stchk34', 's')
-      ->fields('s', ['image'])
-      ->condition('id', $this->id)
-      ->execute()->fetch();
-    if ($result->image) {
-      File::load($result->image)->delete();
-    }
-    $database->delete('stchk34')
+  public function submitForm(array &$form, FormStateInterface $form_state):void {
+    $this->database->delete('stchk34')
       ->condition('id', $this->id)
       ->execute();
-    $this->messenger()->addStatus('Succesfully deleted.');
+    $this->messenger->addStatus($this->t('You successfully deleted a cat!'));
     $form_state->setRedirect('Meow.cats');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormId() : string {
-    return "delete_form";
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCancelUrl() : Url {
-    return new Url('Meow.cats');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getQuestion(): TranslatableMarkup {
-    $database = $this->database();
-    $result = $database->select('stchk34', 's')
-      ->fields('s', ['id'])
-      ->condition('id', $this->id)
-      ->execute()
-      ->fetch();
-    return $this->t('Do you want to delete this cat?');
   }
 
 }
