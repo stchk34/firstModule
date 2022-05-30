@@ -3,12 +3,12 @@
     <p class="cat_table_name">{{ cats_name }}</p>
     <p class="cat_table_email">{{ email }}</p>
     <p class="cat_table_date">{{ date }}</p>
-    {% if user.hasPermission('access to edit cats list') %}
-      <div class="cat_table_buttons">
-        <div class="cat_button cat_table_edit"><a href="#" class="use-ajax cat_table_link" data-dialog-type="modal">Edit</a></div>
-        <div class="cat_button cat_table_delete"><a href='/stchk34/cats/{id}/delete/' class="use-ajax cat_table_link" data-dialog-type="modal">Delete</a></div>
-      </div>
-    {% endif %}
+    <td>
+      <a class="use-ajax edit" data-dialog-type="modal" href="/stchk34/cats/edit/{{ cat.id }}">Edit</a>
+    </td>
+    <td>
+      <a class="use-ajax delete" data-dialog-type="modal" href="/stchk34/cats/delete/{{ cat.id }}">Delete</a>
+    </td>
   </div>
   <div class="image_wrapper">{{ image }}</div>
 </div>

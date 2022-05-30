@@ -4,6 +4,8 @@ namespace Drupal\stchk34\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\file\Entity\File;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 /**
  * Provides route for our custom module.
@@ -59,6 +61,41 @@ class CatsPage extends ControllerBase {
       ];
     }
     return $data;
+  }
+
+  /**
+   * @param $id
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function delete($id): AjaxResponse {
+    $response = new AjaxResponse();
+
+    $delete_form = \Drupal::formBuilder()->getForm('Drupal\stchk34\Form\DeleteForm', $id);
+    $response->addCommand(new OpenModalDialogCommand('Delete', $delete_form,
+      [
+        'width' => 350,
+      ]
+    ));
+
+    return $response;
+  }
+
+  /**
+   * Return modal window with edit form.
+   */
+  public function edit($id): AjaxResponse {
+    $response = new AjaxResponse();
+
+    $conn = $this->database()->select('stchk34', 's');
+    $conn->fields('s', ['id', 'cats_name', 'email']);
+    $conn->condition('id', $id);
+    $results = $conn->execute()->fetchAssoc();
+
+    $edit_form = $this->formBuilder()->getForm('Drupal\stchk34\Form\CatsForm', $results);
+    $response->addCommand(new OpenModalDialogCommand('Edit', $edit_form, ['width' => 500]));
+
+    return $response;
   }
 
 }

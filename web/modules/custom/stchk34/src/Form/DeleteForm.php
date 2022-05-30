@@ -9,7 +9,6 @@ namespace Drupal\stchk34\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Cats delete form class.
@@ -20,32 +19,8 @@ class DeleteForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'delete_cat';
+    return 'delete_form';
   }
-
-  /**
-   * Drupal\Core\Database defenition.
-   *
-   * @var \Drupal\Core\Database\Connection|object|null
-   */
-  private $database;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): DeleteForm {
-    $instance = parent::create($container);
-    $instance->database = $container->get('database');
-    $instance->messenger = $container->get('messenger');
-    return $instance;
-  }
-
-  /**
-   * Cats ids storaging.
-   *
-   * @var null
-   */
-  private $id;
 
   /**
    * {@inheritdoc}
@@ -76,13 +51,19 @@ class DeleteForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $id = $form_state->getValue('id');
+    if ($id != NULL) {
+      $conn = \Drupal::database()->delete('stchk34');
+      $conn->condition('id', $id);
+      $conn->execute();
+      $form_state->setRedirect('stchk34.main');
+    }
+    else {
+      \Drupal::database()->delete('stchk34')->execute();
+      $form_state->setRedirect('stchk34.cats_list');
+    }
 
-    $conn = $this->database()->delete('stchk34');
-    $conn->condition('id', $id);
-    $conn->execute();
 
-    $form_state->setRedirect('stchk34');
-    $this->messenger()->addStatus($this->t("Delete successful"));
+    \Drupal::messenger()->addStatus($this->t("Delete successful"));
   }
 
 }

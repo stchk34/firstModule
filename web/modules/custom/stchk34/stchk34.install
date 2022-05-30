@@ -45,10 +45,4 @@ function stchk34_schema() {
 
   return $schema;
 }
-/**
- * Implements hook_uninstall().
- */
-function stchk34_uninstall()
-{
-  \Drupal::state()->delete('stchk34.stchk34');
-}
+
