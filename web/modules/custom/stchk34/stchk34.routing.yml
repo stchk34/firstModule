@@ -1,0 +1,24 @@
+Meow.cats:
+  path: '/stchk34/cats'
+  defaults:
+    _controller: '\Drupal\stchk34\Controller\CatsPage::content'
+  requirements:
+    _permission: 'access content'
+
+delete_form:
+  path: '/stchk34/delete/{id}'
+  defaults:
+    _form: '\Drupal\stchk34\Form\DeleteForm'
+    _title: 'Are you sure?'
+  requirements:
+    _role: 'administrator'
+    _permission: 'administrator'
+
+edit_form:
+  path: '/stchk34/edit/{id}'
+  defaults:
+    _form: '\Drupal\stchk34\Form\EditCat'
+    _title: 'Edit Cat'
+  requirements:
+    _role: 'administrator'
+    _permission: 'administrator'

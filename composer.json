@@ -16,12 +16,15 @@
     ],
     "require": {
         "composer/installers": "^1.9",
+        "drupal/addtoany": "^1.16",
         "drupal/admin_toolbar": "^3.1",
         "drupal/adminimal_admin_toolbar": "^1.11",
+        "drupal/bootstrap_barrio": "^5.1",
         "drupal/core-composer-scaffold": "^9",
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
         "drupal/ctools": "^3.7",
+        "drupal/libraries": "^3.0@beta",
         "drupal/pathauto": "^1.10",
         "drupal/token": "^1.10",
         "drush/drush": "^10.2"

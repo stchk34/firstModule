@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for stchk34 module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function stchk34_theme($existing, $type, $theme, $path) {
+  return [
+    'cat_page' => [
+      'variables' => [
+        'markup' => NULL,
+        'form' => NULL,
+        'list' => NULL,
+      ],
+    ],
+  ];
+}
