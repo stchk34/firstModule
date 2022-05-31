@@ -1,0 +1,97 @@
+@import "../scss/variables";
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/transitions";
+@import "../node_modules/bootstrap/scss/utilities";
+
+@import "../scss/header";
+@import "../scss/_footer.scss";
+@import "../scss/catsPage";
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  border: none;
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-base;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow-x: hidden;
+}
+
+.content,
+.view-content {
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.main-content {
+  background-color: $light-peach;
+  min-height: 100%;
+  position: relative;
+  flex: 1 0 auto;
+}
+
+h2 {
+  text-align: center;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+.js-pager__items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.pager__item {
+  margin-right: 26px;
+
+}
+
+.views-field-title {
+  color: $primary;
+  font-size: 21px;
+  font-weight: 300;
+}
+
+.views-row,
+.col {
+  padding: 0;
+}
+
+.field-content {
+  text-transform: uppercase;
+}
+
+.row {
+  --bs-gutter-x: 0px;
+}

@@ -1,0 +1,6 @@
+Meow.cats:
+  title: "Cats list"
+  description: "Cats list"
+  route_name: cats_list
+  parent: system.admin_structure
+  weight: 100
