@@ -16,14 +16,12 @@
     align-items: center;
     padding-right: 10px;
 
-    #edit-actions--2{
+    #edit-actions{
         display: flex;
         justify-content: flex-end;
         color: transparent;
-        background: url('../img/search.png');
         background-size: 25px 25px;
-        background-repeat: no-repeat;
-        background-position: center;
+        background: url('../img/search.png') no-repeat center;
         border-color: #dbdbdb;
         border-radius: 5px;
         padding-left: 0;

@@ -26,15 +26,15 @@ edit_form:
 cats_list:
   path: '/admin/structure/catlist'
   defaults:
-    _controller: '\Drupal\stchk34\Form\PageCatsList::content'
+    _form: '\Drupal\stchk34\Form\PageCatsList'
     _title: 'Cats List'
   requirements:
     _permission: 'administrator'
 
 delete_all:
   path: '/stchk34/admin/delete-cat/{id}'
-    defaults:
-      _form: '\Drupal\stchk34\Form\AdminDelete::deleteAll'
-    requirements:
-      _role: 'administrator'
-      _permission: 'administrator'
+  defaults:
+    _form: '\Drupal\stchk34\Form\AdminDelete'
+  requirements:
+    _role: 'administrator'
+    _permission: 'administrator'

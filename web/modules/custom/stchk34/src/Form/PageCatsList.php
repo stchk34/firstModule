@@ -54,7 +54,7 @@ class PageCatsList extends ConfirmFormBase {
         '#alt' => 'Cat Image',
         '#width' => 150,
       ];
-      $deleteUrl = Url::fromRoute('cats_list', ['id' => $row->id]);
+      $deleteUrl = Url::fromRoute('delete_all', ['id' => $row->id]);
       $editUrl = Url::fromRoute('edit_form', ['id' => $row->id]);
       $delete = [
         '#title' => 'Delete',

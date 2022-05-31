@@ -78,3 +78,4 @@ class AdminDelete extends ConfirmFormBase {
   }
 
 }
+
